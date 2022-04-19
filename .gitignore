@@ -1,0 +1,11 @@
+.venv
+.vscode
+
+# Ignorando arquivos poetry pq o cara odeia poetry
+poetry.lock
+pyproject.toml
+
+# Ignorando arquivo de configuração.
+config.yml
+
+__pycache__/
