@@ -23,7 +23,7 @@ def search():
     list_items_html = parsel.Selector(text=page).xpath('//ul[@class="result-list"]').xpath(".//li")
 
     #doing an iteration with the for loop to get each item within the list
-    for x in list_items_html[:2]:
+    for x in list_items_html:
         # getting the text of each title element
         tilte = x.xpath('.//h1[@class="title"]/a/text()').get() 
 
