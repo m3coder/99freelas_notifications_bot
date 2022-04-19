@@ -1,3 +1,4 @@
+from html import escape
 import posixpath
 import time
 
@@ -46,14 +47,7 @@ if __name__ == '__main__':
     # Setting a set of projects.
     projects = set()
 
-    # Storing a reference time.
-    reference_time = 0
-
     while True:
-        # Skip to next loop if interval seconds has not reached yet.
-        if not (time.time() - reference_time >= INTERVAL_SECONDS):
-            continue
-
         # If interval has reached, iterating projects found.
         for project in nnfreelas.search('python'):
             # If project is not in projects set.
@@ -61,14 +55,17 @@ if __name__ == '__main__':
                 # Adding current project to project set.
                 projects.add(project)
 
+                # Storing message.
+                message = FREELA_MESSAGE_FORMAT.format(
+                    url=escape(project.url),
+                    title=escape(project.title),
+                    description=escape(project.description)
+                )
+
                 # Sending text message to telegram chat.
                 telegram_bot.sendMessage(
                     chat_id=config['chat_id'],
-                    text=FREELA_MESSAGE_FORMAT.format(
-                        url=project.url,
-                        title=project.title,
-                        description=project.description
-                    ),
+                    text=message,
                     parse_mode='html',
                     disable_web_page_preview=True
                 )
@@ -78,6 +75,9 @@ if __name__ == '__main__':
             else:
                 # Logging freelance already sent to telegram chat.
                 logger.info('O freelance a enviar ja foi enviado antes.')
+
+        # Sleeping program for an interval of seconds.
+        time.sleep(INTERVAL_SECONDS)
 
         # Breaking line.
         print()
